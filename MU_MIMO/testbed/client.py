@@ -21,6 +21,7 @@ def create_socket_for_local_ip(port, local_ip=None):
 		sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 		sock.bind((local_ip, port))
 		sock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
+		print 'created socket ', sock.getsockname()
 		return sock
 	except:
 			print 'closing socket ', sock.getsockname()
@@ -29,10 +30,9 @@ def create_socket_for_local_ip(port, local_ip=None):
 
 def run_client(server_ip, port=CLIENT_PORT):
 	sock = create_socket_for_local_ip(port)
-	print 'created socket ', sock.getsockname()
 	try:
 		sent = sock.sendto('client!', (server_ip, SERVER_PORT))
-		data, server = sock.recvfrom(1)
+		data, server = sock.recvfrom(65535)
 
 		filename = 'results/client_%s_%s.log' % (datetime.datetime.now(), sock.getsockname()[0])
 		with open(filename, "wb") as f:

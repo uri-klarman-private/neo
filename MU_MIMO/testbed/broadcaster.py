@@ -3,7 +3,7 @@ import socket
 import sys
 from time import sleep
 
-from MU_MIMO.testbed.client import create_socket_for_local_ip, BROADCASTER_PORT
+from MU_MIMO.testbed.client import create_socket_for_local_ip, BROADCASTER_PORT, CLIENT_PORT
 
 
 def start_broadcast():
