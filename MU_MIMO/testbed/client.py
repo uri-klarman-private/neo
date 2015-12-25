@@ -38,7 +38,7 @@ def run_client(server_ip, port=CLIENT_PORT):
 		with open(filename, "w", 1000) as f:
 			while True:
 				data, sender = sock.recvfrom(65535)
-				f.write('%s,%s,%s,%s\n'%(datetime.datetime.now(), sender[1], len(data), data[:-1000][:30]))
+				f.write('%s,%s,%s,%s\n'%(datetime.datetime.now(), sender[1], len(data), data[:19]))
 
 
 
