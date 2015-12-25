@@ -1,3 +1,4 @@
+import os
 import socket
 from socket import AF_INET,SOCK_DGRAM,SOL_SOCKET,SO_REUSEADDR,SO_BROADCAST
 import datetime
@@ -33,12 +34,13 @@ def run_client(server_ip, port=CLIENT_PORT):
 	try:
 		sent = sock.sendto('client!', (server_ip, SERVER_PORT))
 		data, server = sock.recvfrom(65535)
-
-		filename = 'results/client_%s_%s.log' % (datetime.datetime.now(), sock.getsockname()[0])
-		with open(filename, "wb") as f:
+		filename = os.path.abspath(os.path.join('results', 'client_%s_%s.log' % (str(datetime.datetime.now()).replace(':', '_'), sock.getsockname()[0])))
+		with open(filename, "w", 1000) as f:
 			while True:
 				data, sender = sock.recvfrom(65535)
 				f.write('%s,%s,%s,%s\n'%(datetime.datetime.now(), sender[1], len(data), data[:-1000][:30]))
+
+
 
 
 	finally:
