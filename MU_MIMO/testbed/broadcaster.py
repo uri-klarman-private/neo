@@ -1,3 +1,4 @@
+import os
 from socket import AF_INET,SOCK_DGRAM,SOL_SOCKET,SO_REUSEADDR,SO_BROADCAST
 import socket
 import sys
@@ -9,15 +10,16 @@ from MU_MIMO.testbed.client import create_socket_for_local_ip, BROADCASTER_PORT,
 def start_broadcast():
 	sock = create_socket_for_local_ip(port=BROADCASTER_PORT)
 	try:
-		data = 0
+		garbage = '_' + bytearray(os.urandom(1450))
+		packet_index = 0
 		while(True):
-			sock.sendto(str(data)+'x'*1000, ('255.255.255.255', CLIENT_PORT))
+			sock.sendto(str(packet_index).zfill(19) + garbage, ('255.255.255.255', CLIENT_PORT))
 			sleep(0.02)
 
-			if data == sys.maxint:
-				data = 0
+			if packet_index == sys.maxint:
+				packet_index = 0
 			else:
-				data += 1
+				packet_index += 1
 	finally:
 		print 'closing socket ', sock.getsockname()
 		sock.close()
