@@ -32,11 +32,13 @@ def create_socket_for_local_ip(port, ip=''):
 def run_client(server_ip, port=CLIENT_PORT):
 	sock = create_socket_for_local_ip(port)
 	try:
-		sent = sock.sendto('client:' + sock.getsockname()[0], (server_ip, SERVER_PORT))
-		data, server = sock.recvfrom(65535)
-		filename = os.path.abspath(os.path.join('results', 'client_%s_%s.log' %
-		                                        (datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f"),
-		                                         sock.getsockname()[0])))
+		while True:
+			sent = sock.sendto('client:' + sock.getsockname()[0], (server_ip, SERVER_PORT))
+			data, server = sock.recvfrom(65535)
+			if data == 'OK':
+				path =os.path.join('results', 'client_%s_%s.log' % (datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f"),
+				                                                    sock.getsockname()[0]))
+				filename = os.path.abspath(path)
 		with open(filename, "w", 1000) as f:
 			while True:
 				data, sender = sock.recvfrom(65535)

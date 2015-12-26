@@ -17,7 +17,10 @@ def run_server(num_clients=10, port=SERVER_PORT):
 			data, address = sock.recvfrom(65535)
 			print 'received %s from %s' % (data, address)
 			if address[1] == CLIENT_PORT:
-				clients.append(address)
+				if address not in clients:
+					clients.append(address)
+				sock.sendto('OK',choice(clients))
+
 
 		while True:
 			data_len = randint(8500, 9200) # OS X USB/ethernet max size: 9216 bytes
