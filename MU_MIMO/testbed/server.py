@@ -24,6 +24,7 @@ def run_server(num_clients=10, port=SERVER_PORT):
 
 		while True:
 			data_len = randint(8500, 9200) # OS X USB/ethernet max size: 9216 bytes
+			# data_len = randint(2000, 2250) # according to fragmantation level of linksys EA8500
 			data = bytearray(os.urandom(data_len))
 			sock.sendto(data,choice(clients))
 			# sleep(0.001)

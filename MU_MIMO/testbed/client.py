@@ -41,6 +41,7 @@ def run_client(server_ip, port=CLIENT_PORT):
 				print 'failed to hear back from: ', (server_ip, SERVER_PORT)
 				continue
 			if data == 'OK':
+				sock.settimeout(None)
 				path =os.path.join('results', 'client_%s_%s.log' % (datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f"),
 				                                                    sock.getsockname()[0]))
 				filename = os.path.abspath(path)
