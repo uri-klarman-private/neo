@@ -3,7 +3,7 @@ import sys
 import os
 from time import sleep
 
-from MU_MIMO.testbed.client import create_socket_for_local_ip, SERVER_PORT, SERVER_IP
+from MU_MIMO.testbed.client import create_socket_for_local_ip, SERVER_PORT, SERVER_IP, CLIENT_PORT
 
 __author__ = 'uriklarman'
 
@@ -16,14 +16,14 @@ def run_server(num_clients=10, port=SERVER_PORT):
 			print >>sys.stderr, '\nwaiting to receive message'
 			data, address = sock.recvfrom(65535)
 			print 'received %s from %s' % (data, address)
-			clients.append(address)
+			if address[1] == CLIENT_PORT:
+				clients.append(address)
 
 		while True:
-
 			data_len = randint(8500, 9200) # OS X USB/ethernet max size: 9216 bytes
 			data = bytearray(os.urandom(data_len))
 			sock.sendto(data,choice(clients))
-			sleep(0.001)
+			# sleep(0.001)
 
 	finally:
 		print 'closing socket ', sock.getsockname()
@@ -31,4 +31,4 @@ def run_server(num_clients=10, port=SERVER_PORT):
 
 
 if __name__ == "__main__":
-	run_server(num_clients=1)
+	run_server(num_clients=2)

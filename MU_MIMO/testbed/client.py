@@ -35,7 +35,8 @@ def run_client(server_ip, port=CLIENT_PORT):
 		sent = sock.sendto('client:' + sock.getsockname()[0], (server_ip, SERVER_PORT))
 		data, server = sock.recvfrom(65535)
 		filename = os.path.abspath(os.path.join('results', 'client_%s_%s.log' %
-		                                        (str(datetime.datetime.now()).replace(':', '_'),sock.getsockname()[0])))
+		                                        (datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f"),
+		                                         sock.getsockname()[0])))
 		with open(filename, "w", 1000) as f:
 			while True:
 				data, sender = sock.recvfrom(65535)
