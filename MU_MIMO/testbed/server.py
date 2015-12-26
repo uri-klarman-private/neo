@@ -3,20 +3,20 @@ import sys
 import os
 from time import sleep
 
-from MU_MIMO.testbed.client import create_socket_for_local_ip, SERVER_PORT
+from MU_MIMO.testbed.client import create_socket_for_local_ip, SERVER_PORT, SERVER_IP
 
 __author__ = 'uriklarman'
 
 
 def run_server(num_clients=10, port=SERVER_PORT):
-	sock = create_socket_for_local_ip(port,wifi_ip=False)
+	sock = create_socket_for_local_ip(port,ip=SERVER_IP)
 	clients = []
 	try:
 		for i in range(num_clients):
 			print >>sys.stderr, '\nwaiting to receive message'
 			data, address = sock.recvfrom(65535)
-			clients.append(address)
 			print 'received %s from %s' % (data, address)
+			clients.append(address)
 
 		while True:
 
