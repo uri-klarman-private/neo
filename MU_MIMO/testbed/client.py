@@ -16,6 +16,8 @@ SERVER_IP = '192.168.1.147'
 def create_socket_for_local_ip(port, ip=''):
 	sock = socket.socket(AF_INET, SOCK_DGRAM)
 	try:
+		if not ip:
+			ip = socket.gethostbyname(socket.gethostname())
 		sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
 		sock.bind((ip, port))
 		sock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
@@ -30,7 +32,7 @@ def create_socket_for_local_ip(port, ip=''):
 def run_client(server_ip, port=CLIENT_PORT):
 	sock = create_socket_for_local_ip(port)
 	try:
-		sent = sock.sendto('client:' + sock.getsockname()[0], (server_ip, SERVER_PORT))
+		sent = sock.sendto('client!' + sock.getsockname()[0], (server_ip, SERVER_PORT))
 		data, server = sock.recvfrom(65535)
 		filename = os.path.abspath(os.path.join('results', 'client_%s_%s.log' %
 		                                        (str(datetime.datetime.now()).replace(':', '_'),sock.getsockname()[0])))
