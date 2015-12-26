@@ -5,13 +5,13 @@ import sys
 import os
 from time import sleep
 
-from MU_MIMO.testbed.client import create_socket_for_local_ip, SERVER_PORT
+from MU_MIMO.testbed.client import create_socket_for_local_ip, SERVER_PORT, SERVER_IP
 
 __author__ = 'uriklarman'
 
 
-def run_server(num_clients=10, server_ip='10.49.32.127', port=SERVER_PORT):
-	sock = create_socket_for_local_ip(port=port)
+def run_server(num_clients=10, server_ip=SERVER_IP, port=SERVER_PORT):
+	sock = create_socket_for_local_ip(port, server_ip)
 	clients = []
 	try:
 		for i in range(num_clients):

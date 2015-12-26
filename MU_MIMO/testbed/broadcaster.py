@@ -14,7 +14,7 @@ def start_broadcast():
 		packet_index = 0
 		while(True):
 			sock.sendto(str(packet_index).zfill(19) + garbage, ('255.255.255.255', CLIENT_PORT))
-			sleep(0.02)
+			sleep(0.01)
 
 			if packet_index == sys.maxint:
 				packet_index = 0
