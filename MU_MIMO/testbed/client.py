@@ -38,6 +38,7 @@ def run_client(server_ip, port=CLIENT_PORT):
 			try:
 				data, server = sock.recvfrom(65535)
 			except:
+				print 'failed to hear back from: ', (server_ip, SERVER_PORT)
 				continue
 			if data == 'OK':
 				path =os.path.join('results', 'client_%s_%s.log' % (datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f"),
