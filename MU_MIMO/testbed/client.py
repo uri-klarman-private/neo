@@ -2,6 +2,7 @@ import os
 import socket
 from socket import AF_INET,SOCK_DGRAM,SOL_SOCKET,SO_REUSEADDR,SO_BROADCAST
 import datetime
+from netifaces import interfaces, ifaddresses, AF_INET
 
 __author__ = 'uriklarman'
 
@@ -12,12 +13,10 @@ SERVER_PORT = 1611
 SERVER_IP = '192.168.1.147'
 
 
-def create_socket_for_local_ip(port, local_ip=None):
+def create_socket_for_local_ip(port, local_ip=None, wifi_ip=True):
 	if not local_ip:
-		# local_ip = [l for l in ([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")][:1], [[(s.connect(('8.8.8.8', 80)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) if l][0][0]
-		# local_ip = ''
-		# see options here: http://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib
-		local_ip = socket.gethostbyname(socket.gethostname())
+		all_ips = ip4_addresses()
+		local_ip = [ip for ip in all_ips if ('192.168.1' in ip) == wifi_ip][0]
 	sock = socket.socket(AF_INET, SOCK_DGRAM)
 	try:
 		sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
@@ -30,6 +29,16 @@ def create_socket_for_local_ip(port, local_ip=None):
 			sock.close()
 			raise
 
+
+def ip4_addresses():
+	ip_list = []
+	for interface in interfaces():
+		for link in ifaddresses(interface).get(AF_INET, ()):
+			if 'broadcast' in link:
+				ip_list.append(link['addr'])
+	return ip_list
+
+
 def run_client(server_ip, port=CLIENT_PORT):
 	sock = create_socket_for_local_ip(port)
 	try:
@@ -41,12 +50,10 @@ def run_client(server_ip, port=CLIENT_PORT):
 				data, sender = sock.recvfrom(65535)
 				f.write('%s,%s,%s,%s\n'%(datetime.datetime.now(), sender[1], len(data), data[:19]))
 
-
-
-
 	finally:
 		print 'closing socket ', sock.getsockname()
 		sock.close()
+
 
 if __name__ == "__main__":
 	run_client(SERVER_IP)
