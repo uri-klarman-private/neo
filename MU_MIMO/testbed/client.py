@@ -10,7 +10,7 @@ __author__ = 'uriklarman'
 CLIENT_PORT = 1609
 BROADCASTER_PORT = 1610
 SERVER_PORT = 1611
-SERVER_IP = '192.168.1.147'
+SERVER_IP = '192.168.1.108'
 
 
 def create_socket_for_local_ip(port, ip=''):
